@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暗恋分析测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff4fa;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            margin-top: 80px;
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #ff4f89;
+            font-size: 28px;
+        }
+        button {
+            background: #ff4f89;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #ff2d6f;
+        }
+        .result {
+            margin-top: 30px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #ff4f89;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>暗恋你指数测试</h1>
+        <p>点击下方按钮，查看 Ta 是否暗恋你 ❤️</p >
+        <button onclick="testLove()">开始测试</button>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function testLove() {
+            const results = [
+                "90% ❤️ 他真的非常在意你！",
+                "75% ❤️ 好感明显，再等等就会表白！",
+                "60% 😊 有些喜欢，但还不敢表现。",
+                "40% 🙂 有点兴趣，但不够强烈。",
+                "20% 😶 目前只是普通朋友。",
+                "10% 😅 暂时没有特别的感觉。"
+            ];
+
+            const random = Math.floor(Math.random() * results.length);
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerText = results[random];
+            resultDiv.style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
