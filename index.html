@@ -30,7 +30,15 @@ h1{
  padding:28px 22px;
  border-radius:18px;
  box-shadow:0 8px 18px rgba(0,0,0,.13);
- margin-top:64px;   /* 👈 再往下沉一档 */
+ margin-top:64px;
+ animation:float 2.8s ease-in-out infinite;
+}
+
+/* 呼吸浮起动画 */
+@keyframes float{
+ 0%{transform:translateY(0);}
+ 50%{transform:translateY(-6px);}
+ 100%{transform:translateY(0);}
 }
 
 button{
@@ -97,16 +105,13 @@ button{
  <div class="progress">
   <div class="progress-inner" id="bar"></div>
  </div>
- <div id="question-box" class="card"></div>
+ <div id="question-box" class="card" style="animation:none;"></div>
 </div>
 
 <!-- 结果 -->
 <div id="page-result" class="page">
  <h1>测试结果</h1>
-
- <!-- 👇 结果卡片整体下沉 -->
  <div id="result-box" class="card"></div>
-
  <button onclick="makePoster()">生成海报</button>
  <button onclick="restart()">再测一次</button>
 </div>
@@ -168,6 +173,18 @@ function getPercent(){
  return p;
 }
 
+/* 百分比跳动动画 */
+function animatePercent(el, target){
+ let current = 0;
+ let timer = setInterval(()=>{
+   current++;
+   el.innerText = current + "%";
+   if(current >= target){
+     clearInterval(timer);
+   }
+ }, 18);
+}
+
 function showResult(){
  let p = getPercent();
  document.getElementById("page-test").classList.remove("active");
@@ -175,28 +192,24 @@ function showResult(){
 
  document.getElementById("result-box").innerHTML = `
   <div style="margin-top:18px;text-align:center;">
-   <p style="font-size:15px;color:#999;letter-spacing:1px;">
+   <p style="font-size:15px;color:#999;">
     TA 对你暗恋程度
    </p >
 
-   <p style="
-    font-size:68px;
-    font-weight:900;
-    color:#ff3b6a;
-    margin:14px 0 22px;
-   ">
-    ${p}%
+   <p id="percent"
+    style="font-size:72px;font-weight:900;color:#ff3b6a;margin:14px 0 22px;">
+    0%
    </p >
 
-   <p style="
-    font-size:16px;
-    color:#666;
-    line-height:1.7;
-   ">
-    综合互动频率、情绪反应与行为细节计算
+   <p style="font-size:16px;color:#666;">
+    综合互动频率与情绪反应计算
    </p >
   </div>
  `;
+
+ setTimeout(()=>{
+   animatePercent(document.getElementById("percent"), p);
+ },300);
 }
 
 function makePoster(){
@@ -207,7 +220,7 @@ function makePoster(){
  document.getElementById("poster").innerHTML = `
  <div style="background:#fff;padding:26px;border-radius:18px;text-align:center;">
   <h2 style="color:#ff3b6a;">暗恋程度测试</h2>
-  <p style="color:#999;margin:6px 0;">${nameUser}</p >
+  <p style="color:#999;">${nameUser}</p >
 
   <p style="font-size:70px;font-weight:900;color:#ff3b6a;margin:16px 0;">
    ${p}%
@@ -225,9 +238,9 @@ function makePoster(){
 }
 
 function restart(){
- index = 0;
- score = 0;
- document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+ index=0;
+ score=0;
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  document.getElementById("page-start").classList.add("active");
 }
 </script>
