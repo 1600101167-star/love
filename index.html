@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>暗恋测试</title>
-
+<title>暗恋测试（付费版）</title>
 <style>
 body{
  margin:0;
@@ -13,120 +12,55 @@ body{
  min-height:100vh;
  color:#333;
 }
-
-/* 页面基础 */
-.page{
- display:none;
- padding:20px;
- min-height:100vh;
- box-sizing:border-box;
-}
+.page{display:none;padding:20px;}
 .active{display:block;}
-
-h1{
- text-align:center;
- color:#ff3b6a;
- margin:20px 0 10px;
- font-size:28px;
- font-weight:700;
-}
-
-/* 卡片 */
-.card{
- background:#fff;
- padding:30px 22px;
- border-radius:18px;
- box-shadow:0 8px 18px rgba(0,0,0,.13);
- width:100%;
- max-width:420px;
-}
-
-/* 按钮 */
-button{
- width:90%;
- margin:18px auto;
- padding:14px;
- border:none;
- border-radius:14px;
- background:#ff3b6a;
- color:#fff;
- font-size:18px;
- display:block;
-}
-
-/* 选项 */
-.option{
- padding:14px;
- background:#ffd9e4;
- border-radius:13px;
- margin-top:12px;
- font-size:17px;
-}
-
-/* 进度条 */
-.progress{
- width:90%;
- height:12px;
- background:#fff;
- border-radius:10px;
- margin:20px auto;
- overflow:hidden;
-}
-.progress-inner{
- height:100%;
- width:0%;
- background:#ff3b6a;
- transition:.3s;
-}
-
-/* ===================== */
-/* ⭐ 结果页关键布局 ⭐ */
-/* ===================== */
-#page-result{
- display:flex;
- flex-direction:column;
- justify-content:center;   /* 垂直正中 */
- align-items:center;       /* 水平正中 */
-}
-
-/* 结果卡片微下沉（视觉中轴） */
-#result-box{
- transform:translateY(40px);
-}
-
-/* 百分比动画 */
-@keyframes float{
- 0%{transform:translateY(0);}
- 50%{transform:translateY(-6px);}
- 100%{transform:translateY(0);}
-}
+h1{text-align:center;color:#ff3b6a;margin-top:30px;font-size:28px;font-weight:700;}
+.card{background:#fff;padding:28px 22px;border-radius:18px;box-shadow:0 8px 18px rgba(0,0,0,.13);margin-top:64px;animation:float 2.8s ease-in-out infinite;}
+@keyframes float{0%{transform:translateY(0);}50%{transform:translateY(-6px);}100%{transform:translateY(0);}}
+button{width:90%;margin:22px auto;padding:14px;border:none;border-radius:14px;background:#ff3b6a;color:#fff;font-size:18px;display:block;}
+.option{padding:14px;background:#ffd9e4;border-radius:13px;margin-top:12px;font-size:17px;}
+.progress{width:90%;height:12px;background:#fff;border-radius:10px;margin:20px auto 12px;overflow:hidden;}
+.progress-inner{height:100%;width:0%;background:#ff3b6a;transition:.3s;}
+#poster{background:#ffe3ed;padding:22px;border-radius:20px;box-shadow:0 0 25px rgba(255,80,120,.25);}
+#page-pay{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh;}
+#page-result{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;}
+#result-box{width:100%;max-width:420px;transform:translateY(40px);}
 </style>
 </head>
-
 <body>
 
-<!-- 封面 -->
-<div id="page-start" class="page active">
+<!-- 支付页 -->
+<div id="page-pay" class="page active">
  <h1>暗恋测试</h1>
  <div class="card">
-  <p style="text-align:center;color:#666;">测一测 TA 对你的暗恋程度</p >
-  <input id="username" placeholder="输入你的名字"
-   style="width:90%;padding:12px;border-radius:10px;border:1px solid #ddd;display:block;margin:20px auto;">
-  <button onclick="startTest()">开始测试</button>
+  <p style="text-align:center;color:#666;">支付 1 元开始测试</p >
+  <button onclick="showQRCode()">支付 1 元</button>
+  <div id="qrcode" style="display:none;text-align:center;margin-top:20px;">
+    < img src="你的二维码链接.png" style="width:200px;">
+    <p style="color:#666;margin-top:10px;">支付完成后点击下方按钮开始测试</p >
+    <button onclick="startTest()">我已支付</button>
+  </div>
  </div>
 </div>
 
 <!-- 测试页 -->
 <div id="page-test" class="page">
- <div class="progress">
-  <div class="progress-inner" id="bar"></div>
- </div>
- <div id="question-box" class="card"></div>
+ <div class="progress"><div class="progress-inner" id="bar"></div></div>
+ <div id="question-box" class="card" style="animation:none;"></div>
 </div>
 
-<!-- 结果页（重点） -->
+<!-- 结果页 -->
 <div id="page-result" class="page">
+ <h1>测试结果</h1>
  <div id="result-box" class="card"></div>
+ <button onclick="makePoster()">生成海报</button>
+ <button onclick="restart()">再测一次</button>
+</div>
+
+<!-- 海报页 -->
+<div id="page-poster" class="page">
+ <h1>分享海报</h1>
+ <div id="poster"></div>
  <button onclick="restart()">再测一次</button>
 </div>
 
@@ -146,9 +80,12 @@ const questions=[
 
 let index=0,score=0,nameUser="";
 
+function showQRCode(){
+ document.getElementById("qrcode").style.display="block";
+}
+
 function startTest(){
- nameUser=document.getElementById("username").value||"你";
- document.getElementById("page-start").classList.remove("active");
+ document.getElementById("page-pay").classList.remove("active");
  document.getElementById("page-test").classList.add("active");
  loadQ();
 }
@@ -161,8 +98,7 @@ function loadQ(){
   <div class="option" onclick="choose(1)">有一点</div>
   <div class="option" onclick="choose(2)">看不出来</div>
  `;
- document.getElementById("bar").style.width =
-  (index/questions.length)*100 + "%";
+ document.getElementById("bar").style.width=(index/questions.length)*100+"%";
 }
 
 function choose(n){
@@ -171,65 +107,41 @@ function choose(n){
  index >= questions.length ? showResult() : loadQ();
 }
 
-function getPercent(){
- let p = Math.round(score / 30 * 100);
- if(p > 95) p = 95;
- if(p < 10) p = 10;
- return p;
-}
-
-/* 百分比跳动动画 */
-function animatePercent(el, target){
- let cur = 0;
- let timer = setInterval(()=>{
-   cur++;
-   el.innerText = cur + "%";
-   if(cur >= target) clearInterval(timer);
- }, 18);
-}
+function getPercent(){let p=Math.round(score/30*100);if(p>95)p=95;if(p<10)p=10;return p;}
+function animatePercent(el,target){let cur=0;let timer=setInterval(()=>{cur++;el.innerText=cur+"%";if(cur>=target)clearInterval(timer);},18);}
 
 function showResult(){
- let p = getPercent();
+ let p=getPercent();
  document.getElementById("page-test").classList.remove("active");
  document.getElementById("page-result").classList.add("active");
+ document.getElementById("result-box").innerHTML=`
+ <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:240px;">
+  <p style="font-size:15px;color:#999;">TA 对你暗恋程度</p >
+  <div id="percent" style="font-size:72px;font-weight:900;color:#ff3b6a;line-height:1;margin:18px 0;">0%</div>
+  <p style="font-size:16px;color:#666;">综合互动频率与情绪反应计算</p >
+ </div>`;
+ setTimeout(()=>{animatePercent(document.getElementById("percent"),p);},300);
+}
 
- document.getElementById("result-box").innerHTML = `
-  <div style="
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    min-height:240px;
-    text-align:center;
-    animation:float 3s ease-in-out infinite;
-  ">
-    <p style="font-size:15px;color:#999;">TA 对你暗恋程度</p >
-
-    <div id="percent" style="
-      font-size:76px;
-      font-weight:900;
-      color:#ff3b6a;
-      margin:18px 0;
-      line-height:1;
-    ">0%</div>
-
-    <p style="font-size:16px;color:#666;">
-      综合互动频率与行为细节计算
-    </p >
-  </div>
- `;
-
- setTimeout(()=>{
-   animatePercent(document.getElementById("percent"), p);
- },300);
+function makePoster(){
+ let p=getPercent();
+ document.getElementById("page-result").classList.remove("active");
+ document.getElementById("page-poster").classList.add("active");
+ document.getElementById("poster").innerHTML=`
+ <div style="background:#fff;padding:26px;border-radius:18px;text-align:center;">
+  <h2 style="color:#ff3b6a;">暗恋程度测试</h2>
+  <p style="color:#999;">${nameUser}</p >
+  <p style="font-size:70px;font-weight:900;color:#ff3b6a;margin:16px 0;">${p}%</p >
+  <p style="font-size:14px;color:#666;">TA 对你暗恋程度</p >
+ </div>
+ <p style="text-align:center;color:#ff3b6a;margin-top:14px;">· 长按保存 ·</p >`;
 }
 
 function restart(){
- index=0; score=0;
+ index=0;score=0;
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
- document.getElementById("page-start").classList.add("active");
+ document.getElementById("page-pay").classList.add("active");
 }
 </script>
-
 </body>
 </html>
