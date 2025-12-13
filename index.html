@@ -27,14 +27,14 @@ h1{
 
 .card{
  background:#fff;
- padding:28px 22px;
+ padding:30px 22px;
  border-radius:18px;
  box-shadow:0 8px 18px rgba(0,0,0,.13);
  margin-top:64px;
  animation:float 2.8s ease-in-out infinite;
 }
 
-/* 呼吸浮起动画 */
+/* 呼吸浮起 */
 @keyframes float{
  0%{transform:translateY(0);}
  50%{transform:translateY(-6px);}
@@ -75,13 +75,6 @@ button{
  background:#ff3b6a;
  transition:.3s;
 }
-
-#poster{
- background:#ffe3ed;
- padding:22px;
- border-radius:20px;
- box-shadow:0 0 25px rgba(255,80,120,.25);
-}
 </style>
 </head>
 
@@ -91,9 +84,7 @@ button{
 <div id="page-start" class="page active">
  <h1>暗恋测试</h1>
  <div class="card">
-  <p style="text-align:center;color:#666;">
-   测一测 TA 对你的暗恋程度
-  </p >
+  <p style="text-align:center;color:#666;">测一测 TA 对你的暗恋程度</p >
   <input id="username" placeholder="输入你的名字"
    style="width:90%;padding:12px;border-radius:10px;border:1px solid #ddd;display:block;margin:20px auto;">
   <button onclick="startTest()">开始测试</button>
@@ -113,13 +104,6 @@ button{
  <h1>测试结果</h1>
  <div id="result-box" class="card"></div>
  <button onclick="makePoster()">生成海报</button>
- <button onclick="restart()">再测一次</button>
-</div>
-
-<!-- 海报 -->
-<div id="page-poster" class="page">
- <h1>分享海报</h1>
- <div id="poster"></div>
  <button onclick="restart()">再测一次</button>
 </div>
 
@@ -149,9 +133,7 @@ function startTest(){
 function loadQ(){
  let q=questions[index];
  document.getElementById("question-box").innerHTML=`
-  <h2 style="color:#ff3b6a;line-height:1.5;margin-bottom:22px;">
-   ${q.q}
-  </h2>
+  <h2 style="color:#ff3b6a;margin-bottom:22px;">${q.q}</h2>
   <div class="option" onclick="choose(0)">非常明显</div>
   <div class="option" onclick="choose(1)">有一点</div>
   <div class="option" onclick="choose(2)">看不出来</div>
@@ -173,15 +155,13 @@ function getPercent(){
  return p;
 }
 
-/* 百分比跳动动画 */
+/* 百分比动画 */
 function animatePercent(el, target){
- let current = 0;
+ let cur = 0;
  let timer = setInterval(()=>{
-   current++;
-   el.innerText = current + "%";
-   if(current >= target){
-     clearInterval(timer);
-   }
+   cur++;
+   el.innerText = cur + "%";
+   if(cur >= target) clearInterval(timer);
  }, 18);
 }
 
@@ -191,15 +171,26 @@ function showResult(){
  document.getElementById("page-result").classList.add("active");
 
  document.getElementById("result-box").innerHTML = `
-  <div style="margin-top:18px;text-align:center;">
-   <p style="font-size:15px;color:#999;">
-    TA 对你暗恋程度
-   </p >
+  <div style="
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    min-height:220px;
+  ">
+   <p style="font-size:15px;color:#999;">TA 对你暗恋程度</p >
 
-   <p id="percent"
-    style="font-size:72px;font-weight:900;color:#ff3b6a;margin:14px 0 22px;">
+   <div id="percent"
+    style="
+     font-size:72px;
+     font-weight:900;
+     color:#ff3b6a;
+     line-height:1;
+     margin:18px 0;
+    ">
     0%
-   </p >
+   </div>
 
    <p style="font-size:16px;color:#666;">
     综合互动频率与情绪反应计算
@@ -212,34 +203,9 @@ function showResult(){
  },300);
 }
 
-function makePoster(){
- let p = getPercent();
- document.getElementById("page-result").classList.remove("active");
- document.getElementById("page-poster").classList.add("active");
-
- document.getElementById("poster").innerHTML = `
- <div style="background:#fff;padding:26px;border-radius:18px;text-align:center;">
-  <h2 style="color:#ff3b6a;">暗恋程度测试</h2>
-  <p style="color:#999;">${nameUser}</p >
-
-  <p style="font-size:70px;font-weight:900;color:#ff3b6a;margin:16px 0;">
-   ${p}%
-  </p >
-
-  <p style="font-size:14px;color:#666;">
-   TA 对你暗恋程度
-  </p >
- </div>
-
- <p style="text-align:center;color:#ff3b6a;margin-top:14px;">
-  · 长按保存 ·
- </p >
- `;
-}
-
+function makePoster(){}
 function restart(){
- index=0;
- score=0;
+ index=0; score=0;
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  document.getElementById("page-start").classList.add("active");
 }
