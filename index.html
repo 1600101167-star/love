@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>暗恋测试</title>
 
 <style>
 body{
  margin:0;
- font-family:'微软雅黑';
+ font-family:"微软雅黑";
  background:linear-gradient(180deg,#ffeaf1,#ffd4e2,#ffeaf1);
  min-height:100vh;
  color:#333;
@@ -40,18 +40,15 @@ button{
  color:#fff;
  font-size:18px;
  display:block;
- box-shadow:0 4px 10px rgba(255,59,106,0.3);
- transition:.2s;
+ box-shadow:0 4px 10px rgba(255,59,106,.3);
 }
-button:active{transform:scale(0.96);}
 
 .card{
  background:#fff;
  padding:22px;
  border-radius:18px;
  box-shadow:0 6px 15px rgba(0,0,0,.12);
- animation:fadeUp .5s ease;
- margin-top:30px; /* 题目整体下移 */
+ margin-top:30px;
 }
 
 .option{
@@ -60,17 +57,13 @@ button:active{transform:scale(0.96);}
  border-radius:13px;
  margin-top:12px;
  font-size:17px;
- transition:.15s ease;
 }
-.option:active{
- transform:scale(0.95);
- background:#ffc7d7;
-}
+.option:active{transform:scale(.96);}
 
 .progress{
  width:90%;
  height:12px;
- background:#ffffffaa;
+ background:#fff;
  border-radius:10px;
  margin:20px auto;
  overflow:hidden;
@@ -79,16 +72,14 @@ button:active{transform:scale(0.96);}
  height:100%;
  width:0%;
  background:#ff3b6a;
- border-radius:10px;
- transition:width .35s ease;
+ transition:.3s;
 }
 
 #poster{
  background:#ffe3ed;
  padding:20px;
  border-radius:20px;
- box-shadow:0 0 25px rgba(255,50,120,0.25);
- animation:fadeUp .6s ease;
+ box-shadow:0 0 25px rgba(255,80,120,.25);
 }
 </style>
 </head>
@@ -99,20 +90,16 @@ button:active{transform:scale(0.96);}
 <div id="page-start" class="page active">
  <h1>暗恋测试</h1>
  <div class="card">
-  <p style="text-align:center;color:#666;margin-bottom:14px;">
-   粉色小红书风 · 暗恋甜度测量
-  </p >
+  <p style="text-align:center;color:#666;">小红书风 · 暗恋概率测算</p >
   <input id="username" placeholder="输入你的名字"
-   style="width:90%;padding:12px;border-radius:10px;border:1px solid #ddd;display:block;margin:0 auto;">
+   style="width:90%;padding:12px;border-radius:10px;border:1px solid #ddd;display:block;margin:15px auto;">
   <button onclick="startTest()">开始测试</button>
  </div>
 </div>
 
 <!-- 测试 -->
 <div id="page-test" class="page">
- <div class="progress">
-  <div class="progress-inner" id="bar"></div>
- </div>
+ <div class="progress"><div class="progress-inner" id="bar"></div></div>
  <div id="question-box" class="card"></div>
 </div>
 
@@ -133,16 +120,16 @@ button:active{transform:scale(0.96);}
 
 <script>
 const questions=[
- {q:"TA 看你的眼神，会不会闪一下、躲一下、又看回来？",s:[3,2,1]},
- {q:"TA 会主动找你聊天或创造话题吗？",s:[3,2,1]},
- {q:"你发朋友圈时，TA 的点赞或回复是否很稳定？",s:[3,2,1]},
- {q:"你换了发型或穿搭，TA 会注意到吗？",s:[3,2,1]},
- {q:"和 TA 单独相处时，对方会紧张或害羞吗？",s:[3,2,1]},
- {q:"TA 会记住你的小喜好吗？",s:[3,2,1]},
- {q:"你情绪低落时，TA 会明显关心你吗？",s:[3,2,1]},
+ {q:"TA 看你时会刻意避开又忍不住看吗？",s:[3,2,1]},
+ {q:"TA 会主动找你聊天吗？",s:[3,2,1]},
+ {q:"你发动态时，TA 基本都会出现吗？",s:[3,2,1]},
+ {q:"TA 会注意你的小变化吗？",s:[3,2,1]},
+ {q:"和你单独相处时，TA 会紧张吗？",s:[3,2,1]},
+ {q:"TA 记得你的喜好吗？",s:[3,2,1]},
+ {q:"你不开心时，TA 会关心吗？",s:[3,2,1]},
  {q:"TA 会偷偷观察你吗？",s:[3,2,1]},
- {q:"TA 和别人聊天时会提到你吗？",s:[3,2,1]},
- {q:"你的直觉觉得 TA 对你特别吗？",s:[3,2,1]}
+ {q:"TA 会向别人提起你吗？",s:[3,2,1]},
+ {q:"你直觉觉得 TA 喜欢你吗？",s:[3,2,1]}
 ];
 
 let index=0,score=0,nameUser="";
@@ -157,11 +144,7 @@ function startTest(){
 function loadQ(){
  let q=questions[index];
  document.getElementById("question-box").innerHTML=`
-  <h2 style="
-   color:#ff3b6a;
-   margin-bottom:18px;
-   line-height:1.4;
-  ">${q.q}</h2>
+  <h2 style="color:#ff3b6a;line-height:1.4;">${q.q}</h2>
   <div class="option" onclick="choose(0)">非常明显</div>
   <div class="option" onclick="choose(1)">有一点</div>
   <div class="option" onclick="choose(2)">看不出来</div>
@@ -173,77 +156,65 @@ function loadQ(){
 function choose(n){
  score+=questions[index].s[n];
  index++;
- if(index>=questions.length) showR();
- else loadQ();
+ index>=questions.length ? showResult() : loadQ();
 }
 
-function resText(s){
- let percent=Math.round((s/30)*100);
+function getResult(){
+ let percent=Math.round(score/30*100);
  if(percent>95) percent=95;
- if(percent<12) percent=12;
+ if(percent<10) percent=10;
 
- if(s>=24)
-  return{p:percent,t:"TA 真的暗恋你！❤️",
-  c:`${nameUser}，这些细节已经藏不住，TA 对你非常在意。`};
+ let text="";
+ if(percent>=80) text="几乎可以确定，TA 对你是藏不住的在意。";
+ else if(percent>=60) text="暗恋信号明显，关系正在升温。";
+ else if(percent>=40) text="有好感，但还在犹豫和观察。";
+ else text="目前暗恋迹象较弱，更像普通关系。";
 
- if(s>=18)
-  return{p:percent,t:"TA 对你有明显好感 🌸",
-  c:`${nameUser}，暗恋正在慢慢发酵。`};
-
- return{p:percent,t:"暗恋信号较弱 😳",
- c:`${nameUser}，现在更像朋友，但关系会变化。`};
+ return {percent,text};
 }
 
-function showR(){
+function showResult(){
  document.getElementById("page-test").classList.remove("active");
  document.getElementById("page-result").classList.add("active");
- let r=resText(score);
+ let r=getResult();
 
  document.getElementById("result-box").innerHTML=`
-  <h2>${r.t}</h2>
-
-  <p style="font-size:42px;font-weight:900;color:#ff3b6a;margin:10px 0;">
-   ${r.p}%
+  <p style="font-size:46px;font-weight:900;color:#ff3b6a;">
+   ${r.percent}%
   </p >
-  <p style="font-size:14px;color:#999;margin-bottom:12px;">
-   TA 暗恋你的可能性
+  <p style="color:#999;margin-bottom:14px;">
+   TA 暗恋你的概率
   </p >
-
   <p style="font-size:17px;color:#555;line-height:1.6;">
-   ${r.c}
+   ${nameUser}，${r.text}
   </p >
  `;
 }
 
 function makePoster(){
+ let r=getResult();
  document.getElementById("page-result").classList.remove("active");
  document.getElementById("page-poster").classList.add("active");
- let r=resText(score);
 
  document.getElementById("poster").innerHTML=`
- <div style="background:#fff;padding:20px;border-radius:18px;
- box-shadow:0 0 18px rgba(255,80,120,.35);">
+ <div style="background:#fff;padding:20px;border-radius:18px;">
   <h2 style="color:#ff3b6a;">暗恋测试报告</h2>
   <p>昵称：<b>${nameUser}</b></p >
-
-  <p style="font-size:46px;font-weight:900;color:#ff3b6a;margin:10px 0;">
-   ${r.p}%
+  <p style="font-size:50px;font-weight:900;color:#ff3b6a;">
+   ${r.percent}%
   </p >
-  <p style="font-size:14px;color:#999;">暗恋你的概率</p >
-
-  <p style="margin-top:10px;font-size:16px;color:#444;">
-   ${r.c}
-  </p >
+  <p style="color:#999;">暗恋你的概率</p >
+  <p style="margin-top:10px;">${r.text}</p >
  </div>
  <p style="text-align:center;color:#ff3b6a;margin-top:12px;">
-  · 长按保存海报 ·
+  · 长按保存 ·
  </p >
  `;
 }
 
 function restart(){
- index=0; score=0;
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ index=0;score=0;
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  document.getElementById("page-start").classList.add("active");
 }
 </script>
